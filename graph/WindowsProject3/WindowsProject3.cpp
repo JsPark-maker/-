@@ -126,6 +126,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         Queue.EnQueue(rand() % 300);
         break;
     }
+    case WM_SIZE:
+    {
+        //비트맵을 생성했을 때 크기를 작게 설정이 되었다면
+        //사이즈를 변경할 때 WM_SIZE가 호출되니 여기서 바뀐 사이즈로 rect구조체를 바꿔줘야함.
+        HDC hdc = GetDC(hWnd);
+        HDC hdc = GetDC(hWnd);
+        SelectObject(hMemDC, hMemBitmapOld);
+        DeleteObject(hMemBitmap);
+        GetClientRect(hWnd, &rect);
+        hMemBitmap = CreateCompatibleBitmap(hdc, rect.right, rect.bottom);
+        hMemBitmapOld = (HBITMAP)SelectObject(hMemDC, hMemBitmap);
+        ReleaseDC(hWnd, hdc);
+        break;
+    }
+        
     case WM_COMMAND:
         {
             int wmId = LOWORD(wParam);
